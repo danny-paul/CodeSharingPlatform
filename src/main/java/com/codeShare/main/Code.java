@@ -14,15 +14,15 @@ import java.time.format.DateTimeFormatter;
 public class Code {
     private LocalDateTime localDT;
     private String code;
-    private Path path;
+    private Path codeSnippetPath;
     private DateTimeFormatter dTF;
 
     Code() {
-        path = Paths.get("C:\\Users\\danny\\Desktop\\main\\src\\main\\java\\com\\codeShare\\main\\code.txt");
-        dTF = DateTimeFormatter.ofPattern("'TIME:'yyyy-MM-dd'T'HH:mm");
+        codeSnippetPath = Paths.get("C:\\Users\\danny\\Desktop\\main\\src\\main\\java\\com\\codeShare\\main\\code.txt");
+        dTF = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         try {
-            if (Files.exists(path)) { //if code already present in file, adds to object
-                String fileContents[] = readAsString(path.toString()).split("TIME:");
+            if (Files.exists(codeSnippetPath)) { //if code already present in file, adds to object
+                String fileContents[] = readAsString(codeSnippetPath.toString()).split("TIME:");
                 this.code = fileContents[0];
                 fileContents[1] = fileContents[1].trim();
                 this.localDT = LocalDateTime.parse(fileContents[1]);
@@ -38,8 +38,20 @@ public class Code {
     public LocalDateTime getLocalDT() {
         return this.localDT;
     }
+
     public String getCode() {
         return this.code;
+    }
+
+    public String getHtmlCode() {
+        Path htmlTemplatePath = Paths.get("C:\\Users\\danny\\Desktop\\main\\src\\main\\java\\com\\codeShare\\main\\CurrentCode.html");
+        String htmlWithCode = "";
+        try {
+            htmlWithCode = String.format(readAsString(htmlTemplatePath.toString()), this.code, this.localDT.format(dTF));
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+        return htmlWithCode;
     }
 
     public void updateCode(String plainCode) {
@@ -49,10 +61,10 @@ public class Code {
     }
 
     private void writeToFile() {
-        String toFile = new String(this.code + "\n" + this.localDT.format(dTF));
+        String toFile = new String(this.code + "\nTIME:" + this.localDT.format(dTF));
         byte[] byteToString = toFile.getBytes();
         try {
-            Files.write(path, byteToString);
+            Files.write(codeSnippetPath, byteToString);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }

@@ -1,2 +1,6 @@
-newness2
-TIME:2021-01-24T15:24
+public class main {
+    public static void main(String[] args) {
+        System.out.println("fooie!");
+    }
+}
+TIME:2021-01-24T17:52

@@ -6,6 +6,10 @@
 <pre id="code_snippet">
 %s
 </pre>
-<span id="load_date">%s</span>
+<p>
+<span id="load_date">
+%s
+</span>
+</p>
 </body>
 </html>
